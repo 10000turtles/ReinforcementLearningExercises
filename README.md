@@ -1,1 +1,1 @@
-# Reinforcement-Learning-Exercizes
+# ReinforcementLearningExercizes
