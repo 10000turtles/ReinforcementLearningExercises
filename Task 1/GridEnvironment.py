@@ -6,6 +6,7 @@
 class GridEnvironment:
   RewardKey = {"_": 0, "W": 1, "L": -10, "0": 0}
   MoveKey = ["R", "U", "L", "D", "■"]
+  DirectionKey = [(0, 1), (-1, 0), (0, -1), (1, 0)]
 
   def __init__(self, envData, agentPos, obeyProbs, gamma):
     self.board = envData  # envData is a 2-D array of characters/strings. _ = empty, 0 = wall, W = winning spot, L = losing spot.
@@ -16,27 +17,9 @@ class GridEnvironment:
     self.gamma = gamma
 
   def move(self, direction):  # direction is 0-3. 0 is right, 1 is up, 2 is left, 3 is down.
-    return
-
-  def calcValue(self, p):  # p is a tuple representing position. Returns the maxValue, move
-    possibleMoves = [(p[0], p[1]+1), (p[0]-1, p[1]), (p[0], p[1]-1), (p[0]+1, p[1])]
-    moveValues = [0]*4
-    for j, i in enumerate(possibleMoves):
-      reward = sum([GridEnvironment.RewardKey[self.board[possibleMoves[(j+k) % 4][0]][possibleMoves[(j+k) % 4][1]]]*self.obeyProbs[k] for k in range(4)])
-      outcomes = self.gamma * sum([self.boardValues[possibleMoves[(j+k) % 4][0]][possibleMoves[(j+k) % 4][1]]*self.obeyProbs[k] for k in range(4)])
-      moveValues[j] = reward + outcomes
-    maxValue = max(moveValues)
-    return maxValue, moveValues.index(maxValue)
-
-  def updateValues(self):
-    valuesTemp = [[0]*len(self.boardValues[0]) for i in range(len(self.boardValues))]
-    movesTemp = [[4]*len(self.boardValues[0]) for i in range(len(self.boardValues))]
-    for i in range(len(valuesTemp)):
-      for j in range(len(valuesTemp[0])):
-        if self.board[i][j] == "_":
-          valuesTemp[i][j], movesTemp[i][j] = self.calcValue((i, j))
-    self.boardValues = valuesTemp
-    self.boardMoves = movesTemp
+    newSpace = (self.position[0]+GridEnvironment.DirectionKey[direction[0]], self.position[1]+GridEnvironment.DirectionKey[direction[1]])
+    if self.board[newSpace[0]][newSpace[1]] != "0":
+      self.position = newSpace
 
   def printBoard(self):
     for i in self.board:
