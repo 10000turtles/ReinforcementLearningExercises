@@ -17,17 +17,16 @@ class GridEnvironment:
     self.terminalState = 0
 
   def move(self, direction):  # direction is 0-3. 0 is right, 1 is up, 2 is left, 3 is down.
-    print(self.position)
-    print(direction)
     newSpace = (self.position[0]+GridEnvironment.DirectionKey[direction][0], self.position[1]+GridEnvironment.DirectionKey[direction][1])
-    print(newSpace)
     if self.board[newSpace[0]][newSpace[1]] != "0":
       self.position = newSpace
     if self.board[self.position[0]][self.position[1]] == "W":
       self.terminalState = 1
     if self.board[self.position[0]][self.position[1]] == "L":
       self.terminalState = -1
-
+  def reset(self):
+    self.position = self.startPos
+    self.terminalState = 0
   def printBoard(self):
     for i in self.board:
       print("-"*(len(self.board[0])*2+1))
