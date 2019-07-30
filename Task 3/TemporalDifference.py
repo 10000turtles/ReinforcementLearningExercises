@@ -26,12 +26,14 @@ class TaxiBot:
   def trainingGame(self, environment):
     self.epsilon = self.epsilonStart
     oldState = environment.reset()
+
     for i in range(TaxiBot.maxSteps):
-      action = bot.move(oldState, True)
-      newState, reward, done, garbo = environment.step(action)
+      action = self.move(oldState, True)
+      newState, reward, done, info = environment.step(action)
 
       if oldState == newState:
         reward = -10
+
       self.TempDiffQTable(oldState, newState, action, reward)
 
       oldState = newState
@@ -51,7 +53,7 @@ class TaxiBot:
       self.PTable[i] = np.argmax(self.QTable[i])
 
   def TempDiffQTable(self, oldState, newState, action, reward):
-    self.QTable[oldState][action] = (1-self.learningRate)*self.QTable[oldState][action]+self.learningRate*(reward+self.gamma*max(self.QTable[newState]))
+    self.QTable[oldState][action] = (1-self.learningRate) * self.QTable[oldState][action] + self.learningRate * (reward + self.gamma * max(self.QTable[newState]))
 
 
 game = "Taxi-v2"
