@@ -1,23 +1,14 @@
-
-import random
+from NNL import NNL
 import numpy as np
 
 
-def analyze(obj):
-  object_methods = [method_name for method_name in dir(obj)
-                    if callable(getattr(obj, method_name))]
-  print(object_methods)
-  print(obj.__dict__.keys())
+class FrozenLakeBot:
 
-
-class TaxiBot:
-  numMoves = 6
-  numStates = 500
+  numMoves = 4
   maxSteps = 50
 
-  def __init__(self, gamma, learningRate, epsilon):
-    self.QTable = [[0 for i in range(TaxiBot.numMoves)]for j in range(TaxiBot.numStates)]
-    self.PTable = [random.randint(0, 5)for j in range(TaxiBot.numStates)]
+  def __init__(self, gamma, epsilon, learningRate, layerSizes):
+    self.QTable = NNL(learningRate, layerSizes)
     self.gamma = gamma
     self.learningRate = learningRate
     self.epsilon = epsilon
@@ -25,9 +16,10 @@ class TaxiBot:
 
   def trainingGame(self, environment):
     self.epsilon = self.epsilonStart
+
     oldState = environment.reset()
 
-    for i in range(TaxiBot.maxSteps):
+    for i in range(FrozenLakeBot.maxSteps):
       action = self.move(oldState, True)
       newState, reward, done, info = environment.step(action)
 
@@ -37,19 +29,16 @@ class TaxiBot:
       self.TempDiffQTable(oldState, newState, action, reward)
 
       oldState = newState
-      self.epsilon += (1-self.epsilonStart)/TaxiBot.maxSteps
+      self.epsilon += (1-self.epsilonStart)/FrozenLakeBot.maxSteps
       if done:
         break
     self.updatePTable()
 
-  def move(self, state, useEpsilon):
-    if random.random() > self.epsilon or (not useEpsilon):
-      return self.PTable[state]
-    else:
-      return random.randint(0, 5)
+  def move(self, state):
+    return
 
   def updatePTable(self):
-    for i in range(TaxiBot.numStates):
+    for i in range(FrozenLakeBot.numStates):
       self.PTable[i] = np.argmax(self.QTable[i])
 
   def TempDiffQTable(self, oldState, newState, action, reward):

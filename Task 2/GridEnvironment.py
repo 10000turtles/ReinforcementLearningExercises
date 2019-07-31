@@ -24,9 +24,11 @@ class GridEnvironment:
       self.terminalState = 1
     if self.board[self.position[0]][self.position[1]] == "L":
       self.terminalState = -1
+
   def reset(self):
     self.position = self.startPos
     self.terminalState = 0
+
   def printBoard(self):
     for i in self.board:
       print("-"*(len(self.board[0])*2+1))

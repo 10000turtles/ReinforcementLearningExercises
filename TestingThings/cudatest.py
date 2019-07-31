@@ -4,6 +4,13 @@ from numba import cuda
 import math
 
 
+def analyze(obj):
+  object_methods = [method_name for method_name in dir(obj)
+                    if callable(getattr(obj, method_name))]
+  print(object_methods)
+  print(obj.__dict__.keys())
+
+
 @cuda.jit
 def my_kernel(ar):
   # Thread id in a 1D block
