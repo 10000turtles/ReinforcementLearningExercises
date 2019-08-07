@@ -1,7 +1,11 @@
 from GridEnvironment import GridEnvironment
 import random
+
+
 def mean(ar):
   return sum(ar)/len(ar)
+
+
 class GridWorldBot:
   MoveKey = ["R", "U", "L", "D"]
 
@@ -60,7 +64,8 @@ class GridWorldBot:
       moveValues = [self.QTable[state+str(i)]for i in range(4)]
       moveChoice = moveValues.index(max(moveValues))
       self.policyTable[state] = moveChoice
-  def printPolicyTable(self,board):
+
+  def printPolicyTable(self, board):
     print("-"*(len(board.board[0])*2+1))
     for i in range(len(board.board)):
       a = "|"

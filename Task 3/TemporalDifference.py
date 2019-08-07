@@ -3,13 +3,6 @@ import random
 import numpy as np
 
 
-def analyze(obj):
-  object_methods = [method_name for method_name in dir(obj)
-                    if callable(getattr(obj, method_name))]
-  print(object_methods)
-  print(obj.__dict__.keys())
-
-
 class TaxiBot:
   numMoves = 6
   numStates = 500

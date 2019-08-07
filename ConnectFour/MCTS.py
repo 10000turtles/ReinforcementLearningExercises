@@ -1,5 +1,4 @@
 import math
-import random
 from ConnectFour import ConnectFour
 import pickle
 import sys
