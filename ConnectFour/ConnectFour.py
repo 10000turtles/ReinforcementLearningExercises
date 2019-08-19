@@ -27,6 +27,8 @@ class ConnectFour:
 
   def possibleMoves(self):
     moves = []
+    if(self.isWinner() or self.isTie()):
+      return []
     for i in range(self.columns):
       if self.board[i][0] == 0:
         moves.append(i)
@@ -76,25 +78,28 @@ class ConnectFour:
   def isWinner(self):
     for i in range(self.columns - self.winNum + 1):
       for j in range(self.rows - self.winNum + 1):
-        temp = (self.board[i][j] != 0)
-        k = 0
-        while(temp):
-          k += 1
-          temp = temp and (self.board[i][j] == self.board[i+k][j])
-          if k == self.winNum-1:
-            break
-        if temp:
-          return self.board[i][j]
 
-        temp = (self.board[i][j] != 0)
-        k = 0
-        while(temp):
-          k += 1
-          temp = temp and (self.board[i][j] == self.board[i][j+k])
-          if k == self.winNum-1:
-            break
-        if temp:
-          return self.board[i][j]
+        for l in range(self.winNum):
+          temp = (self.board[i][j+l] != 0)
+          k = 0
+          while(temp):
+            k += 1
+            temp = temp and (self.board[i][j+l] == self.board[i+k][j+l])
+            if k == self.winNum-1:
+              break
+          if temp:
+            return self.board[i][j+l]
+
+        for l in range(self.winNum):
+          temp = (self.board[i+l][j] != 0)
+          k = 0
+          while(temp):
+            k += 1
+            temp = temp and (self.board[i+l][j] == self.board[i+l][j+k])
+            if k == self.winNum-1:
+              break
+          if temp:
+            return self.board[i+l][j]
 
         temp = (self.board[i][j] != 0)
         k = 0
@@ -106,24 +111,24 @@ class ConnectFour:
         if temp:
           return self.board[i][j]
 
-        temp = (self.board[i][j+3] != 0)
+        temp = (self.board[i][j+self.winNum-1] != 0)
         k = 0
         while(temp):
           k += 1
-          temp = temp and (self.board[i][j+3] == self.board[i+k][j+3-k])
+          temp = temp and (self.board[i][j+self.winNum-1] == self.board[i+k][j+self.winNum-k-1])
           if k == self.winNum-1:
             break
         if temp:
-          return self.board[i][j]
+          return self.board[i][j+self.winNum-1]
     return 0
 
   def printBoard(self):
     RenderKey = [Fore.BLUE + "■" + Style.RESET_ALL, " ", Fore.RED + "■" + Style.RESET_ALL]
-    for i in range(len(self.board)):
-      print("-"*(len(self.board[0])*2+1))
+    for i in range(self.rows):
+      print("-"*(self.columns*2+1))
       a = "|"
-      for j in range(len(self.board[i])):
-        a += RenderKey[self.board[i][j]+1] + "|"
+      for j in range(self.columns):
+        a += RenderKey[self.board[j][i]+1] + "|"
       print(a)
     print("-"*(len(self.board[0])*2+1))
     return
